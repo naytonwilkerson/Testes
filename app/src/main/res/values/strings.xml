@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">AcionaWifi</string>
+    <string name="wifi_on">Wifi On</string>
+    <string name="discover">discover</string>
+    <string name="message">Message</string>
+    <string name="send">Send</string>
+    <string name="connection_status">Connection Status</string>
+    <string name="descoberta_de_pares">Descoberta de pares</string>
+    <string name="wifi">WIFI</string>
+    <string name="buscar">Buscar</string>
+    <string name="iniciar">Iniciar</string>
+</resources>
