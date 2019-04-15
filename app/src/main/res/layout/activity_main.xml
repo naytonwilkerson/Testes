@@ -22,11 +22,11 @@
         android:id="@+id/discover"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/connectionStatus"
         android:layout_alignBaseline="@+id/onOff"
-        android:layout_alignTop="@+id/connectionStatus"
         android:layout_alignBottom="@+id/onOff"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="56dp"
+        android:layout_marginTop="30dp"
         android:layout_marginEnd="50dp"
         android:layout_marginBottom="-1dp"
         android:text="@string/buscar"
@@ -46,14 +46,13 @@
         tools:layout_editor_absoluteX="0dp" />
 
     <Button
-        android:id="@+id/sendButton"
+        android:id="@+id/OrderButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/peerListView"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="121dp"
-        android:layout_marginBottom="2dp"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="151dp"
+        android:layout_marginTop="114dp"
         android:text="@string/iniciar"
         tools:layout_editor_absoluteX="289dp"
         tools:layout_editor_absoluteY="460dp" />

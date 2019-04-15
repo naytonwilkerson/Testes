@@ -38,10 +38,11 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
 
-
-    Button btnOnOff, btnDiscovery, btnSend;
+    Button btnOnOff;
+    Button btnDiscovery;
+    static Button btnOrder;
     ListView listView;
-    TextView  connectionStatus;
+    TextView connectionStatus;
 
 
     WifiManager wifiManager;
@@ -51,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
     BroadcastReceiver mReceiver;
     IntentFilter mIntentFilter;
 
-    List<WifiP2pDevice> peers =new ArrayList<>();
+    List<WifiP2pDevice> peers = new ArrayList<>();
     String[] deviceNameArray;
     WifiP2pDevice[] deviceArray;
 
@@ -60,8 +61,9 @@ public class MainActivity extends AppCompatActivity {
 
     SendReceiver sendReceiver;
 
+    OrderActivity send = new OrderActivity();
 
-    static final int MESSAGE_READ=1;
+    static final int MESSAGE_READ = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,16 +77,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     private void exqListener() {
+
+
         btnOnOff.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(wifiManager.isWifiEnabled())
-                {
+                if (wifiManager.isWifiEnabled()) {
                     wifiManager.setWifiEnabled(false);
                     btnOnOff.setText("ON");
-                }else{
+                } else {
                     wifiManager.setWifiEnabled(true);
                     btnOnOff.setText("OFF");
                 }
@@ -119,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
                 mManager.connect(mChannel, config, new WifiP2pManager.ActionListener() {
                     @Override
                     public void onSuccess() {
-                        Toast.makeText(getApplicationContext(), "Conectado a "+device.deviceName, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Conectado a " + device.deviceName, Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
@@ -132,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        btnSend.setOnClickListener(new View.OnClickListener() {
+        btnOrder.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, OrderActivity.class);
                 startActivity(intent);
@@ -142,21 +144,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void initialWork(){
-        btnOnOff =  findViewById(R.id.onOff);
-        btnDiscovery= findViewById(R.id.discover);
-        btnSend =  findViewById(R.id.sendButton);
-        listView =  findViewById(R.id.peerListView);
-
+    private void initialWork() {
+        btnOnOff = findViewById(R.id.onOff);
+        btnDiscovery = findViewById(R.id.discover);
+        btnOrder = findViewById(R.id.OrderButton);
+        listView = findViewById(R.id.peerListView);
         connectionStatus = findViewById(R.id.connectionStatus);
 
 
-        wifiManager = (WifiManager)getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
 
         mManager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
-        mChannel=mManager.initialize(this,getMainLooper(),null);
+        mChannel = mManager.initialize(this, getMainLooper(), null);
 
-        mReceiver=new WifiDirectBroadcastReceiver(mManager, mChannel, this);
+        mReceiver = new WifiDirectBroadcastReceiver(mManager, mChannel, this);
         mIntentFilter = new IntentFilter();
 
 
@@ -168,11 +169,11 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    WifiP2pManager.PeerListListener peerListListener = new WifiP2pManager.PeerListListener(){
+    WifiP2pManager.PeerListListener peerListListener = new WifiP2pManager.PeerListListener() {
         @Override
         public void onPeersAvailable(WifiP2pDeviceList peerList) {
 
-            if(!peerList.getDeviceList().equals(peers)){
+            if (!peerList.getDeviceList().equals(peers)) {
 
                 peers.clear();
                 peers.addAll(peerList.getDeviceList());
@@ -182,18 +183,17 @@ public class MainActivity extends AppCompatActivity {
 
                 int index = 0;
 
-                for(WifiP2pDevice device : peerList.getDeviceList()){
+                for (WifiP2pDevice device : peerList.getDeviceList()) {
                     deviceNameArray[index] = device.deviceName;
                     deviceArray[index] = device;
                     index++;
                 }
 
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(),android.R.layout.simple_expandable_list_item_1,deviceNameArray);
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_expandable_list_item_1, deviceNameArray);
                 listView.setAdapter(adapter);
             }
 
-            if(peers.size() == 0)
-            {
+            if (peers.size() == 0) {
                 Toast.makeText(getApplicationContext(), "Nenhum Dispositivo Encontrado", Toast.LENGTH_SHORT).show();
             }
 
@@ -202,13 +202,13 @@ public class MainActivity extends AppCompatActivity {
 
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
-        registerReceiver(mReceiver,mIntentFilter);
+        registerReceiver(mReceiver, mIntentFilter);
     }
 
     @Override
-    public void onPause(){
+    public void onPause() {
         super.onPause();
         unregisterReceiver(mReceiver);
     }
@@ -217,13 +217,11 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onConnectionInfoAvailable(WifiP2pInfo info) {
             final InetAddress groupOwnerAddress = info.groupOwnerAddress;
-            if(info.groupFormed && info.isGroupOwner)
-            {
+            if (info.groupFormed && info.isGroupOwner) {
                 connectionStatus.setText("Professor");
                 serverClass = new MainActivity.ServerClass();
                 serverClass.start();
-            }else if(info.groupFormed)
-            {
+            } else if (info.groupFormed) {
                 connectionStatus.setText("Aluno");
                 clientClass = new ClientClass(groupOwnerAddress);
                 clientClass.start();
@@ -231,16 +229,19 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    Handler handler = new Handler(new Handler.Callback() {
+
+    static Handler handler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message msg) {
-            switch (msg.what)
-            {
+            switch (msg.what) {
                 case MainActivity.MESSAGE_READ:
-                    byte[] readBuff = (byte[])msg.obj;
-                    String tempMsg = new String(readBuff,0,msg.arg1);
-                    String read_msg_box =tempMsg;
-                    Toast.makeText(getApplicationContext(), read_msg_box, Toast.LENGTH_SHORT).show();
+                    byte[] readBuff = (byte[]) msg.obj;
+                    String tempMsg = new String(readBuff, 0, msg.arg1);
+                    String read_msg_box = tempMsg;
+                    btnOrder.setText(read_msg_box);
+                    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                     OrderActivity.read_msg_box.append("\n"+"User"+" : "+read_msg_box);
+
                     break;
             }
             return true;
@@ -267,10 +268,11 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    public class SendReceiver extends Thread {
+
+    public static   class SendReceiver extends Thread {
         private Socket socket;
         private InputStream inputStream;
-        private OutputStream outputStream;
+        private static OutputStream outputStream;
 
         SendReceiver(Socket s) {
             socket = s;
@@ -281,6 +283,9 @@ public class MainActivity extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+
+        public SendReceiver() {
 
         }
 
@@ -303,16 +308,20 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-       public void write(byte[] bytes)
-        {
+        public static void write(byte[] bytes) {
+
             try {
                 outputStream.write(bytes);
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
 
     }
+
+
+
     public class ClientClass extends Thread{
         Socket socket;
         String hostAdd;
@@ -327,7 +336,7 @@ public class MainActivity extends AppCompatActivity {
         public void run() {
             try {
                 socket.connect(new InetSocketAddress(hostAdd,8888),500);
-                sendReceiver = new MainActivity.SendReceiver(socket);
+                sendReceiver = new SendReceiver(socket);
                 sendReceiver.start();
 
             } catch (IOException e) {

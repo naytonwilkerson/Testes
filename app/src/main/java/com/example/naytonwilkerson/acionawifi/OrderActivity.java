@@ -8,17 +8,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 
-
-
 public class OrderActivity extends AppCompatActivity {
 
     Button btnMandar;
-    TextView read_msg_box, connectionStatus;
+   public static TextView read_msg_box, connectionStatus;
     EditText writeMsg;
 
 
-     MainActivity mainActivity = new MainActivity();
-
+    MainActivity.SendReceiver send = new MainActivity.SendReceiver();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,17 +27,19 @@ public class OrderActivity extends AppCompatActivity {
         writeMsg =  findViewById(R.id.writeMsg2);
         connectionStatus =  findViewById(R.id.connectionStatus);
 
-      btnMandar.setOnClickListener(new View.OnClickListener() {
+
+
+        btnMandar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String msg = writeMsg.getText().toString();
-                mainActivity.sendReceiver.write(msg.getBytes());
+                read_msg_box.append("\n"+"You"+" : "+writeMsg.getText().toString());
+                writeMsg.setText("");
+               MainActivity.SendReceiver.write(msg.getBytes());
             }
         });
 
     }
-
-
 
 }
 
