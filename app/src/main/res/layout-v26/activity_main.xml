@@ -10,19 +10,19 @@
         android:id="@+id/onOff"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/connectionStatus"
+        android:layout_below="@+id/Status"
         android:layout_alignParentStart="true"
         android:layout_marginStart="52dp"
         android:layout_marginTop="30dp"
         android:text="@string/wifi"
-        app:layout_constraintTop_toBottomOf="@+id/connectionStatus"
+        app:layout_constraintTop_toBottomOf="@+id/Status"
         tools:layout_editor_absoluteX="16dp" />
 
     <Button
         android:id="@+id/discover"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/connectionStatus"
+        android:layout_below="@+id/Status"
         android:layout_alignBaseline="@+id/onOff"
         android:layout_alignBottom="@+id/onOff"
         android:layout_alignParentEnd="true"
@@ -30,7 +30,7 @@
         android:layout_marginEnd="50dp"
         android:layout_marginBottom="-1dp"
         android:text="@string/buscar"
-        app:layout_constraintTop_toBottomOf="@+id/connectionStatus"
+        app:layout_constraintTop_toBottomOf="@+id/Status"
         tools:layout_editor_absoluteX="185dp" />
 
     <ListView
@@ -58,7 +58,7 @@
         tools:layout_editor_absoluteY="460dp" />
 
     <TextView
-        android:id="@+id/connectionStatus"
+        android:id="@+id/Status"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"

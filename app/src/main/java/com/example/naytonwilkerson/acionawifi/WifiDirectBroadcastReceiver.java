@@ -12,6 +12,8 @@ public class WifiDirectBroadcastReceiver extends BroadcastReceiver {
     private WifiP2pManager mManager;
     private WifiP2pManager.Channel mChannel;
     private MainActivity mActivity;
+    private OrderActivity orderActivity = new OrderActivity();
+
 
 
     public WifiDirectBroadcastReceiver(WifiP2pManager mManager, WifiP2pManager.Channel mChannel, MainActivity mActivity)
@@ -56,7 +58,7 @@ public class WifiDirectBroadcastReceiver extends BroadcastReceiver {
 
             if(networkInfo.isConnected())
             {
-                mManager.requestConnectionInfo(mChannel, mActivity.connectionInfoListener);
+                mManager.requestConnectionInfo(mChannel, orderActivity.connectionInfoListener);
             }else {
                 Toast.makeText(context, "Sem conexões", Toast.LENGTH_SHORT).show();
             }
